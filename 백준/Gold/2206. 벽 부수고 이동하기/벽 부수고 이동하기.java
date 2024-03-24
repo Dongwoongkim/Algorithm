@@ -57,8 +57,8 @@ public class Main {
 
                 if (nextX >= 0 && nextY >= 0 && nextX < n && nextY < m) {
                     // 벽인 경우
-                    if (map[nextX][nextY] == 1 && broke < 1 && check[nextX][nextY][broke + 1] == false) {
-                        check[nextX][nextY][broke + 1] = true;
+                    if (map[nextX][nextY] == 1 && broke == 0 && check[nextX][nextY][1] == false) {
+                        check[nextX][nextY][1] = true;
                         q.add(new Position(nextX, nextY, currentMove + 1, broke + 1));
                     }
 
