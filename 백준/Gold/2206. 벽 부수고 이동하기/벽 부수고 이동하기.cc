@@ -8,7 +8,7 @@
 using namespace std;
 
 vector<vector<char>> v(1001,vector<char>(1001));
-bool check[1001][1001][11];
+bool check[1001][1001][2];
 int n,m,k;
 int dy[]={-1,1,0,0};
 int dx[]={0,0,-1,1};
