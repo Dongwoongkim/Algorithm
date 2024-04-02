@@ -16,36 +16,31 @@ public class Main {
                 break;
             }
             arr = new int[n + 1];
-            boolean[] check = new boolean[n + 1];
-            tmp = new int[7];
+            tmp = new int[6];
 
-            for (int i = 1; i <= n; i++) {
+            for (int i = 0; i < n; i++) {
                 arr[i] = sc.nextInt();
             }
 
-            rec(1, check);
+            dfs(0, 0);
 
             sb.append("\n");
         }
         System.out.print(sb);
     }
 
-    private static void rec(int pos, boolean[] check) {
-        if (pos == 7) {
-            for (int i = 1; i <= 6; i++) {
+    private static void dfs(int start, int depth) {
+        if (depth == 6) {
+            for (int i = 0; i < 6; i++) {
                 sb.append(tmp[i] + " ");
             }
             sb.append("\n");
             return;
         }
 
-        for (int i = pos; i <= n; i++) {
-            if (check[i] == false && tmp[pos - 1] < arr[i]) {
-                check[i] = true;
-                tmp[pos] = arr[i];
-                rec(pos + 1, check);
-                check[i] = false;
-            }
+        for (int i = start; i < n; i++) {
+            tmp[depth] = arr[i];
+            dfs(i + 1, depth + 1);
         }
     }
 }
