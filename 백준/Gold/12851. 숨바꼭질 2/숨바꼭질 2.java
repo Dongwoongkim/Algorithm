@@ -9,7 +9,6 @@ public class Main {
     static int n;
     static int m;
     static boolean[] visited = new boolean[100_001];
-    static int[] distance = new int[100_001];
     static int ans = 0;
     static int cnt = 0;
 
@@ -45,26 +44,23 @@ public class Main {
                     cnt++;
                 }
             }
-            
+
             visited[now] = true;
 
             if (now * 2 >= 0 && now * 2 <= 100000) {
                 if (visited[now * 2] == false) {
-                    distance[now * 2] = distance[now] + 1;
                     pq.add(new Node(now * 2, cost + 1));
                 }
             }
 
             if (now + 1 >= 0 && now + 1 <= 100000) {
                 if (visited[now + 1] == false) {
-                    distance[now + 1] = distance[now] + 1;
                     pq.add(new Node(now + 1, cost + 1));
                 }
             }
 
             if (now - 1 >= 0 && now - 1 <= 100000) {
                 if (visited[now - 1] == false) {
-                    distance[now - 1] = distance[now] + 1;
                     pq.add(new Node(now - 1, cost + 1));
                 }
             }
