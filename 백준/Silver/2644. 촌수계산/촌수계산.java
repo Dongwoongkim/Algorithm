@@ -7,7 +7,6 @@ public class Main {
 
     static List<PriorityQueue<Integer>> vector = new ArrayList<>();
     static boolean[] visited;
-    static int cnt = 0;
     static boolean isCon = false;
 
     public static void main(String[] args) {
