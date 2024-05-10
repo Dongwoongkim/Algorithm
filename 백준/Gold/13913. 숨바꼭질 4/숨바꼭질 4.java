@@ -3,9 +3,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
+import java.util.PriorityQueue;
 import java.util.StringTokenizer;
 
 public class Main {
@@ -46,7 +45,7 @@ public class Main {
     }
 
     private static void bfs(int start) {
-        Queue<Node> pq = new LinkedList<>();
+        PriorityQueue<Node> pq = new PriorityQueue<>();
         pq.add(new Node(start, 0));
 
         while (!pq.isEmpty()) {
@@ -63,35 +62,44 @@ public class Main {
             }
 
             if (now * 2 >= 0 && now * 2 <= 100000) {
-                if (visited[now * 2] == false && parent[now * 2] == 0) {
+                if (visited[now * 2] == false) {
                     pq.add(new Node(now * 2, cost + 1));
                     parent[now * 2] = now;
+                    visited[now * 2] = true;
                 }
             }
 
             if (now + 1 >= 0 && now + 1 <= 100000) {
-                if (visited[now + 1] == false && parent[now + 1] == 0) {
+                if (visited[now + 1] == false) {
                     pq.add(new Node(now + 1, cost + 1));
                     parent[now + 1] = now;
+                    visited[now + 1] = true;
                 }
             }
 
             if (now - 1 >= 0 && now - 1 <= 100000) {
-                if (visited[now - 1] == false && parent[now - 1] == 0) {
+                if (visited[now - 1] == false) {
                     pq.add(new Node(now - 1, cost + 1));
                     parent[now - 1] = now;
+                    visited[now - 1] = true;
                 }
             }
         }
     }
 
-    static class Node {
+    static class Node implements Comparable<Node> {
         int now;
         int cost;
 
         public Node(int now, int cost) {
             this.now = now;
             this.cost = cost;
+        }
+
+
+        @Override
+        public int compareTo(Node o) {
+            return Integer.compare(this.cost, o.cost);
         }
     }
 }
