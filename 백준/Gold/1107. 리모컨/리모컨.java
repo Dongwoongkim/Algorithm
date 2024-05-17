@@ -13,15 +13,9 @@ public class Main {
         }
 
         int ans = Integer.MAX_VALUE;
-
         ans = Math.min(ans, Math.abs(n - 100));
-//        System.out.println(ans);
 
-        // 100 -> 0
-        // 0,1고장
-        // 2를 만들고 (1) +
-
-        for (int i = 0; i <= 10_000_000; i++) {
+        for (int i = 0; i <= 500_000 + 500_000; i++) {
             if (check(i)) {
                 int length = String.valueOf(i).length();
                 ans = Math.min(length + Math.abs(n - i), ans);
