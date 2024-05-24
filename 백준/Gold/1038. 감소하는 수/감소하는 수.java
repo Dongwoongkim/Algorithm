@@ -7,16 +7,14 @@ import java.util.Queue;
 public class Main {
 
     static int cnt = 0;
-    static int n;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        n = Integer.parseInt(br.readLine());
-
-        System.out.println(bfs());
+        int n = Integer.parseInt(br.readLine());
+        System.out.println(bfs(n));
     }
 
-    private static String bfs() {
+    private static String bfs(int n) {
         Queue<String> queue = new LinkedList<>();
 
         for (int i = 0; i <= 9; i++) {
@@ -31,7 +29,7 @@ public class Main {
             String s = queue.poll();
 
             for (int i = 0; i <= 9; i++) {
-                int num = Integer.parseInt(String.valueOf(s.charAt(s.length() - 1)));
+                int num = s.charAt(s.length() - 1) - '0';
                 if (num > i) {
                     queue.add(s + i);
                     if (cnt == n) {
@@ -43,16 +41,6 @@ public class Main {
         }
 
         return String.valueOf(-1);
-    }
-
-    private static boolean check(String k) {
-        for (int i = 0; i < k.length() - 1; i++) {
-            if (k.charAt(i) <= k.charAt(i + 1)) {
-                return false;
-            }
-        }
-
-        return true;
     }
 }
 
