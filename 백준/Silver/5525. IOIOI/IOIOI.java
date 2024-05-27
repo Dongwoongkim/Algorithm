@@ -9,26 +9,30 @@ public class Main {
         int n = Integer.parseInt(br.readLine());
         int m = Integer.parseInt(br.readLine());
 
-        String l = "I";
-
-        for (int i = 0; i < n; i++) {
-            l += "OI";
-        }
-
         String line = br.readLine();
-        int cnt = 0;
 
-        int idx = 0;
-        while (true) {
-            if (idx > m - l.length()) {
-                break;
+        int ans = 0;
+        for (int i = 0; i < m; i++) {
+            if (line.charAt(i) == 'I') {
+                int cnt = 0;
+
+                while (true) {
+                    if (i + 2 < m && line.charAt(i + 1) == 'O' && line.charAt(i + 2) == 'I') {
+                        cnt++;
+                        i += 2;
+                    } else {
+                        break;
+                    }
+
+                    if (cnt == n) {
+                        cnt--;
+                        ans++;
+                    }
+                }
+
             }
-            if (line.substring(idx, idx + l.length()).equals(l)) {
-                cnt++;
-            }
-            
-            idx++;
         }
-        System.out.println(cnt);
+
+        System.out.println(ans);
     }
 }
