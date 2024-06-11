@@ -30,20 +30,20 @@ public class Main {
             }
         }
 
-        // 끝에서부터 역순으로 탐색
-        for (int i = n; i >= 1; i--) {
-            for (int j = i + 2; j <= n; j++) {
-//                System.out.println(i + " " + j);
-                // 양쪽 끝의 원소가 같을때
-                if (arr[i] == arr[j]) {
-                    if (dp[i + 1][j - 1] == 1) {
-                        dp[i][j] = 1;
+        for (int gap = 2; gap <= n - 1; gap++) {
+            for (int j = 1; j <= n - gap; j++) {
+//                System.out.println((j) + " " + (j + gap));
+                // 양쪽 끝의 원소가 같고 && (처음 + 1) ~ (끝 - 1)이 같을 때
+                if (arr[j] == arr[j + gap]) {
+                    if (dp[j + 1][j + gap - 1] == 1) {
+                        dp[j][j + gap] = 1;
                     }
                 }
             }
         }
 
         int m = Integer.parseInt(br.readLine());
+
         for (int i = 0; i < m; i++) {
             st = new StringTokenizer(br.readLine());
 
