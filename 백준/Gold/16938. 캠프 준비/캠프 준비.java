@@ -31,8 +31,12 @@ public class Main {
     }
 
     private static void rec(int cur, int min, int max, int sum) {
+        if (sum > r) {
+            return;
+        }
+
         if (cur == n + 1) {
-            if (l <= sum && sum <= r && x <= (max - min)) {
+            if (l <= sum && x <= (max - min)) {
                 ans++;
                 return;
             }
