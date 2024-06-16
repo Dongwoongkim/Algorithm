@@ -6,7 +6,6 @@ import java.util.StringTokenizer;
 public class Main {
 
     static int[] problem;
-    static boolean[] check;
     static int ans = 0;
     static int n, l, r, x;
 
@@ -20,47 +19,30 @@ public class Main {
         x = Integer.parseInt(st.nextToken());
 
         problem = new int[n + 1];
-        check = new boolean[n + 1];
 
         st = new StringTokenizer(br.readLine());
         for (int i = 1; i <= n; i++) {
             problem[i] = Integer.parseInt(st.nextToken());
         }
 
-        System.out.println(rec(1));
+        rec(1, Integer.MAX_VALUE, -1, 0);
+
+        System.out.println(ans);
     }
 
-    private static int rec(int cur) {
+    private static void rec(int cur, int min, int max, int sum) {
         if (cur == n + 1) {
-            int cnt = 0;
-            int sum = 0;
-            int max = -1;
-            int min = Integer.MAX_VALUE;
-
-            for (int i = 1; i <= n; i++) {
-                if (check[i] == true) {
-                    cnt++;
-                    sum += problem[i];
-                    min = Math.min(min, problem[i]);
-                    max = Math.max(max, problem[i]);
-                }
+            if (l <= sum && sum <= r && x <= (max - min)) {
+                ans++;
+                return;
             }
-
-            if (cnt >= 2 && l <= sum && sum <= r && x <= (max - min)) {
-                return 1;
-            }
-
-            return 0;
+            return;
         }
 
-        // 현재 문제 고르는 경우
-        check[cur] = true;
-        int cnt1 = rec(cur + 1);
-        check[cur] = false;
+        // 현재 문제 선택한 경우
+        rec(cur + 1, Math.min(min, problem[cur]), Math.max(max, problem[cur]), sum + problem[cur]);
 
-        // 현재 문제 고르지 않는 경우
-        int cnt2 = rec(cur + 1);
-
-        return cnt1 + cnt2;
+        // 현재 문제 선택 X
+        rec(cur + 1, min, max, sum);
     }
 }
