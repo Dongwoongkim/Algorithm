@@ -22,14 +22,12 @@ public class Main {
         }
 
         for (int i = 0; i < n; i++) {
-            // left
             for (int j = i - 1; j >= 0; j--) {
                 if (canSee(j, arr[j], i, arr[i])) {
                     ans[i]++;
                 }
             }
 
-            // right
             for (int j = i + 1; j < n; j++) {
                 if (canSee(i, arr[i], j, arr[j])) {
                     ans[i]++;
