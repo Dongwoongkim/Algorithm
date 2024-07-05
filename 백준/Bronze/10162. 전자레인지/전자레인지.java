@@ -16,9 +16,9 @@ public class Main {
         int c = n / 10;
 
         if (k == a * 300 + b * 60 + c * 10) {
-            System.out.println(a + " " + b + " " + c);
+            System.out.print(a + " " + b + " " + c);
         } else {
-            System.out.println(-1);
+            System.out.print(-1);
         }
     }
 }
