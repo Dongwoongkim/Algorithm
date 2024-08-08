@@ -1,5 +1,5 @@
 -- 코드를 입력하세요
-SELECT book_id, date_format(published_date, '%Y-%m-%d') as published_date
-from book
-where category = '인문' and published_date like '2021%'
-order by published_date asc;
+SELECT BOOK_ID, TO_CHAR(PUBLISHED_DATE, 'YYYY-MM-DD') AS PUBLISHED_DATE
+FROM BOOK
+WHERE CATEGORY = '인문' AND TO_CHAR(PUBLISHED_DATE, 'YYYY') = '2021'
+ORDER BY PUBLISHED_DATE ASC;
