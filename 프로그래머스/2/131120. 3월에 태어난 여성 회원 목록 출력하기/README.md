@@ -1,6 +1,6 @@
 # [level 2] 3월에 태어난 여성 회원 목록 출력하기 - 131120 
 
-[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/131120) 
+[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/131120?language=oracle) 
 
 ### 성능 요약
 
@@ -16,7 +16,7 @@ Empty
 
 ### 제출 일자
 
-2024년 06월 03일 16:18:50
+2024년 08월 08일 16:56:46
 
 ### 문제 설명
 
