@@ -7,10 +7,11 @@ import java.util.StringTokenizer;
 
 public class Main {
 
-    static int n;
-    static int m;
+    static int n, m;
     static int[][] map;
-    static boolean[] check;
+    static List<Position> homes = new ArrayList<>();
+    static List<Position> chickens = new ArrayList<>();
+    static int[] pick;
     static int ans = Integer.MAX_VALUE;
 
     public static void main(String[] args) throws IOException {
@@ -20,65 +21,53 @@ public class Main {
         n = Integer.parseInt(st.nextToken());
         m = Integer.parseInt(st.nextToken());
 
-        List<Position> chickens = new ArrayList<>();
-        List<Position> homes = new ArrayList<>();
-        map = new int[n + 1][n + 1];
+        map = new int[n][n];
+        pick = new int[m];
 
         for (int i = 0; i < n; i++) {
-            String line = br.readLine();
-            st = new StringTokenizer(line);
-
+            st = new StringTokenizer(br.readLine());
             for (int j = 0; j < n; j++) {
                 map[i][j] = Integer.parseInt(st.nextToken());
-
-                if (map[i][j] == 2) {
-                    chickens.add(new Position(i, j));
-                }
-
                 if (map[i][j] == 1) {
                     homes.add(new Position(i, j));
                 }
+                if (map[i][j] == 2) {
+                    chickens.add(new Position(i, j));
+                }
             }
         }
-        check = new boolean[chickens.size()];
 
-        dfs(homes, chickens, 0, 0);
-        System.out.println(ans);
+        rec(0, 0);
+        System.out.print(ans);
     }
-
-    private static void dfs(List<Position> homes, List<Position> chickens, int cur, int cnt) {
-        if (cnt == m) {
+    private static void rec(int pos, int next) {
+        if (pos == m) {
             int sum = 0;
-            for (int j = 0; j < homes.size(); j++) {
-                int distance = 999_999_999;
-                for (int i = 0; i < chickens.size(); i++) {
-                    if (check[i] == true) {
-                        Position chicken = chickens.get(i);
-                        Position home = homes.get(j);
-                        distance = Math.min(distance, Math.abs(chicken.x - home.x) + Math.abs(chicken.y - home.y));
-                    }
+
+            for (Position hPos : homes) {
+                int dist = Integer.MAX_VALUE;
+
+                for (int idx : pick) {
+                    Position cPos = chickens.get(idx);
+                    int d = Math.abs(cPos.x - hPos.x) + Math.abs(cPos.y - hPos.y);
+                    dist = Math.min(dist, d);
                 }
-                sum += distance;
+                sum += dist;
             }
 
             ans = Math.min(ans, sum);
             return;
         }
 
-        for (int i = cur; i < chickens.size(); i++) {
-            if (check[i] == false) {
-                check[i] = true;
-                dfs(homes, chickens, i + 1, cnt + 1);
-                check[i] = false;
-            }
+        for (int i = next; i < chickens.size(); i++) {
+            pick[pos] = i;
+            rec(pos + 1, i + 1);
         }
     }
 
     static class Position {
-        int x;
-        int y;
-
-        public Position(int x, int y) {
+        int x, y;
+        Position(int x, int y) {
             this.x = x;
             this.y = y;
         }
