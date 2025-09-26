@@ -11,7 +11,11 @@ public class Main {
     public static void main(String[] args) throws IOException {
         input();
         for (int i = 0; i < n; i++) {
-            sum += (long) ((s.charAt(i) - 96) * Math.pow(31, i));
+            long pow = 1;
+            for (int j = 0; j < i; j++) {
+                pow = (pow * 31) % 1234567891;
+            }
+            sum = (sum + ((s.charAt(i) - 96) * pow) % 1234567891) % 1234567891;
         }
         System.out.println(sum);
     }
