@@ -1,93 +1,81 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
-import java.util.Scanner;
+import java.util.StringTokenizer;
 
 public class Main {
 
+    static int n, m, k;
+    static boolean[] checkForDfs = new boolean[1001];
+    static boolean[] checkForBfs = new boolean[1001];
+
     static List<List<Integer>> vector = new ArrayList<>();
-    static boolean[] check;
-    static int[] bfsResult;
-    static int[] dfsResult;
-    static int idx = 0;
+    static StringBuilder dfsAnswer = new StringBuilder();
+    ;
+    static StringBuilder bfsAnswer = new StringBuilder();
 
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        int n = sc.nextInt();
-        int m = sc.nextInt();
-        int v = sc.nextInt();
-
-        check = new boolean[n + 1];
-        bfsResult = new int[n + 1];
-        dfsResult = new int[n + 1];
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        n = Integer.parseInt(st.nextToken());
+        m = Integer.parseInt(st.nextToken());
+        k = Integer.parseInt(st.nextToken());
 
         for (int i = 0; i < n + 1; i++) {
             vector.add(new ArrayList<>());
         }
 
         for (int i = 0; i < m; i++) {
-            int from = sc.nextInt();
-            int to = sc.nextInt();
+            st = new StringTokenizer(br.readLine());
+            int start = Integer.parseInt(st.nextToken());
+            int end = Integer.parseInt(st.nextToken());
 
-            vector.get(from).add(to);
-            vector.get(to).add(from);
+            vector.get(start).add(end);
+            vector.get(end).add(start);
         }
 
         for (int i = 0; i < n + 1; i++) {
-            Collections.sort(vector.get(i));
+            vector.get(i).sort(Comparator.comparingInt(x -> x));
         }
 
-        dfs(v);
+        dfs(k);
+        bfs(k);
 
-        for (int i = 0; i < n; i++) {
-            if (dfsResult[i] != 0) {
-                System.out.print(dfsResult[i] + " ");
-            }
-        }
+        System.out.println(dfsAnswer.toString().trim());
+        System.out.print(bfsAnswer.toString().trim());
+    }
 
-        Arrays.fill(check, false);
-        idx = 0;
-        bfs(v);
+    private static void dfs(int node) {
+        checkForDfs[node] = true;
+        dfsAnswer.append(node).append(" ");
 
-        System.out.println();
-        for (int i = 0; i < n; i++) {
-            if (bfsResult[i] != 0) {
-                System.out.print(bfsResult[i] + " ");
+        for (int i = 0; i < vector.get(node).size(); i++) {
+            Integer next = vector.get(node).get(i);
+
+            if (!checkForDfs[next]) {
+                dfs(next);
             }
         }
     }
 
-    private static void bfs(int start) {
+    private static void bfs(int node) {
         Queue<Integer> queue = new LinkedList<>();
-        check[start] = true;
-        queue.add(start);
+        queue.add(node);
+        checkForBfs[node] = true;
 
         while (!queue.isEmpty()) {
-            int next = queue.peek();
-            bfsResult[idx++] = next;
-            queue.poll();
-
+            Integer next = queue.poll();
+            bfsAnswer.append(next).append(" ");
             for (int i = 0; i < vector.get(next).size(); i++) {
-                if (check[vector.get(next).get(i)] == false) {
-                    check[vector.get(next).get(i)] = true;
+                if (!checkForBfs[vector.get(next).get(i)]) {
                     queue.add(vector.get(next).get(i));
+                    checkForBfs[vector.get(next).get(i)] = true;
                 }
-            }
-        }
-    }
-
-    private static void dfs(int start) {
-        check[start] = true;
-        dfsResult[idx++] = start;
-
-        for (int i = 0; i < vector.get(start).size(); i++) {
-            int next = vector.get(start).get(i);
-
-            if (check[next] == false) {
-                dfs(next);
             }
         }
     }
