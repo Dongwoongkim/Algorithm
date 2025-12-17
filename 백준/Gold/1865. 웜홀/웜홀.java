@@ -3,100 +3,85 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.PriorityQueue;
 import java.util.StringTokenizer;
 
 public class Main {
 
-	static int t, n, m, w;
-	static long[] dp;
-	static List<Edge> edges;
+    static int t;
+    static List<Node> nodes = new ArrayList<>();
+    static StringBuilder sb = new StringBuilder();
 
-	public static void main(String[] args) throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        t = Integer.parseInt(br.readLine());
 
-		t = Integer.parseInt(br.readLine());
+        for (int i = 0; i < t; i++) {
+            StringTokenizer st = new StringTokenizer(br.readLine());
+            int n = Integer.parseInt(st.nextToken());
+            int m = Integer.parseInt(st.nextToken());
+            int w = Integer.parseInt(st.nextToken());
 
-		for (int c = 0; c < t; c++) {
-			StringTokenizer st = new StringTokenizer(br.readLine());
-			n = Integer.parseInt(st.nextToken());
-			m = Integer.parseInt(st.nextToken());
-			w = Integer.parseInt(st.nextToken());
-			dp = new long[n + 1];
-			edges = new ArrayList<>();
+            nodes = new ArrayList<>();
 
-			for (int i = 0; i <= n; i++) {
-				dp[i] = Long.MAX_VALUE;
-			}
+            for (int j = 0; j < m; j++) {
+                st = new StringTokenizer(br.readLine());
+                int start = Integer.parseInt(st.nextToken());
+                int end = Integer.parseInt(st.nextToken());
+                int weight = Integer.parseInt(st.nextToken());
 
-			for (int i = 0; i < m; i++) {
-				st = new StringTokenizer(br.readLine());
+                nodes.add(new Node(start, end, weight));
+                nodes.add(new Node(end, start, weight));
+            }
 
-				int start = Integer.parseInt(st.nextToken());
-				int end = Integer.parseInt(st.nextToken());
-				int time = Integer.parseInt(st.nextToken());
+            for (int j = 0; j < w; j++) {
+                st = new StringTokenizer(br.readLine());
+                int start = Integer.parseInt(st.nextToken());
+                int end = Integer.parseInt(st.nextToken());
+                int weight = Integer.parseInt(st.nextToken());
 
-				edges.add(new Edge(start, end, time));
-				edges.add(new Edge(end, start, time));
-			}
+                nodes.add(new Node(start, end, -1 * weight));
+            }
 
-			for (int i = 0; i < w; i++) {
-				st = new StringTokenizer(br.readLine());
+            sb.append(bellandFord(n)).append("\n");
+        }
 
-				int start = Integer.parseInt(st.nextToken());
-				int end = Integer.parseInt(st.nextToken());
-				int time = Integer.parseInt(st.nextToken());
+        System.out.println(sb);
+    }
 
-				edges.add(new Edge(start, end, -time));
-			}
+    private static String bellandFord(int n) {
+        long[] distances = new long[n + 1];
 
-			if(bf(1)) {
-				System.out.println("YES");
-			} else {
-				System.out.println("NO");
-			}
-		}
-	}
+        for (int i = 0; i < n; i++) {
+            boolean changed = false;
+            for (Node node : nodes) {
+                if (distances[node.end] > distances[node.start] + node.weight) {
+                    distances[node.end] = distances[node.start] + node.weight;
+                    changed = true;
 
-	private static boolean bf(int start) {
-		dp = new long[n + 1];
-		dp[start] = 0;
+                    if (i == n - 1) {
+                        return "YES";
+                    }
+                }
+            }
 
-		// 정점 사이의 최단 경로 = 최대 V−1
-		// 갱신이 일어나지 않은경우 조기종료
-		// start에서 end로 가는 weight를 최대 v-1번 갱신하여 시작노드로부터 최소비용을 계산
-		for (int i = 0; i < n - 1; i++) {
-			boolean changed = false;
-			for (Edge edge : edges) {
-				if (dp[edge.start] != Long.MAX_VALUE && dp[edge.start] + edge.time < dp[edge.end]) {
-					dp[edge.end] = dp[edge.start] + edge.time;
-					changed = true;
-				}
-			}
+            if (!changed) {
+                break;
+            }
+        }
 
-			if (!changed) break;
-		}
+        return "NO";
+    }
 
-		// v-1번 갱신한 이후 한번 더 갱신했을 때
-		// 음수 가중치로 갱신이 발생하면 음수사이클
-		for (Edge edge : edges) {
-			if (dp[edge.start] != Long.MAX_VALUE && dp[edge.start] + edge.time < dp[edge.end]) {
-				return true;
-			}
-		}
+    static class Node {
 
-		return false;
-	}
+        int start;
+        int end;
+        int weight;
 
-	static class Edge {
-		int start;
-		int end;
-		int time;
-
-		public Edge(int start, int end, int time) {
-			this.start = start;
-			this.end = end;
-			this.time = time;
-		}
-	}
+        public Node(int start, int end, int weight) {
+            this.start = start;
+            this.end = end;
+            this.weight = weight;
+        }
+    }
 }
