@@ -1,46 +1,56 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Arrays;
-import java.util.Scanner;
+import java.util.StringTokenizer;
 
 public class Main {
 
-    static long[] arr;
+    static int k, n;
+    static long[] length;
 
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        int n = sc.nextInt();
-        int m = sc.nextInt();
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        k = Integer.parseInt(st.nextToken());
+        n = Integer.parseInt(st.nextToken());
 
-        arr = new long[n + 1];
+        length = new long[k + 1];
 
-        for (int i = 0; i < n; i++) {
-            arr[i] = sc.nextInt();
+        for (int i = 0; i < k; i++) {
+            length[i] = Integer.parseInt(br.readLine());
         }
 
-        Arrays.sort(arr, 0, n);
-        System.out.println(getAnswer(arr, n, m));
+        Arrays.sort(length, 0, k);
+
+        System.out.print(binarySearch());
     }
 
-    private static long getAnswer(long[] arr, int n, int m) {
-        long min = 0;
-        long max = arr[n - 1] + 1;
+    private static long binarySearch() {
+        long start = 1;
+        long end = length[k - 1];
+        long ans = -1;
 
-        while (min < max) {
-            long mid = (min + max) / 2;
+        while (start <= end) {
+            long cnt = 0;
+            long mid = (start + end) / 2;
 
-            long count = 0;
-            for (int i = 0; i < n; i++) {
-                count += (arr[i]) / mid;
+            for (int i = 0; i < k; i++) {
+                cnt += length[i] / mid;
             }
 
-            if (count < m) {
-                max = mid;
+
+            if (cnt < n) {
+                end = mid - 1;
             }
 
-            if (count >= m) {
-                min = mid + 1;
+            if (cnt >= n) {
+                ans = mid;
+                start = mid + 1;
             }
         }
 
-        return min - 1;
+        return ans;
+
     }
 }
