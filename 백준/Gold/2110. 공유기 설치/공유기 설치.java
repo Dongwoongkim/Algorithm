@@ -1,59 +1,61 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Arrays;
-import java.util.Scanner;
+import java.util.StringTokenizer;
 
 public class Main {
 
-    static int n;
-    static int c;
-    static int[] arr;
+    static int n, c;
+    static long[] length;
 
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        n = sc.nextInt();
-        c = sc.nextInt();
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        n = Integer.parseInt(st.nextToken());
+        c = Integer.parseInt(st.nextToken());
 
-        arr = new int[n + 1];
+        length = new long[n + 1];
 
         for (int i = 0; i < n; i++) {
-            arr[i] = sc.nextInt();
+            length[i] = Long.parseLong(br.readLine());
         }
 
-        Arrays.sort(arr, 0, n);
+        Arrays.sort(length, 0, n);
 
-        System.out.println(binarySearch(arr));
+        System.out.print(binarySearch());
     }
 
-    private static int binarySearch(int[] arr) {
-        int start = 1;
-        int end = arr[n - 1] + 1;
+    private static long binarySearch() {
+        long start = 1;
+        long end = length[n - 1] - length[0];
+        long ans = 0L;
 
-        while (start < end) {
-            int mid = (start + end) / 2;
-            int count = installCount(mid);
+        while (start <= end) {
+            long mid = (start + end) / 2;
 
-            if (count >= c) {
+            int cnt = 1;
+            int pos = 0;
+            for (int i = 1; i < n; i++) {
+                long distance = length[i] - length[pos];
+                if (distance >= mid) {
+                    cnt++;
+                    pos = i;
+                }
+            }
+
+//            System.out.println(mid + " " + cnt);
+
+            if (cnt < c) {
+                end = mid - 1;
+            }
+
+            if (cnt >= c) {
                 start = mid + 1;
-            }
-            if (count < c) {
-                end = mid;
+                ans = mid;
             }
         }
 
-        return start - 1;
-    }
-
-    private static int installCount(int interval) {
-        int count = 1;
-        int start = arr[0];
-
-        for (int i = 1; i < n; i++) {
-            int next = arr[i];
-            if (next - start >= interval) {
-                count++;
-                start = arr[i];
-            }
-        }
-
-        return count;
+        return ans;
     }
 }
