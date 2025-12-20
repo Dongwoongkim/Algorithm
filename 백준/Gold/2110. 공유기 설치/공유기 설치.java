@@ -28,10 +28,10 @@ public class Main {
 
     private static long binarySearch() {
         long start = 1;
-        long end = length[n - 1] - length[0];
+        long end = length[n - 1] - length[0] + 1;
         long ans = 0L;
 
-        while (start <= end) {
+        while (start < end) { // 어퍼바운드
             long mid = (start + end) / 2;
 
             int cnt = 1;
@@ -44,15 +44,13 @@ public class Main {
                 }
             }
 
-//            System.out.println(mid + " " + cnt);
-
             if (cnt < c) {
-                end = mid - 1;
+                end = mid; // 간격을 줄이고
             }
 
             if (cnt >= c) {
-                start = mid + 1;
                 ans = mid;
+                start = mid + 1; // 간격을 늘려보기
             }
         }
 
