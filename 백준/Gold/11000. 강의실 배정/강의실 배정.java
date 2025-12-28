@@ -1,56 +1,74 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.PriorityQueue;
-import java.util.Scanner;
+import java.util.StringTokenizer;
 
 public class Main {
 
     static int n;
+    static List<Lecture> lectures = new ArrayList<>();
 
-    static boolean[] check;
-
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        n = sc.nextInt();
-
-        List<Class> classes = new ArrayList<>();
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        n = Integer.parseInt(br.readLine());
 
         for (int i = 0; i < n; i++) {
-            int start = sc.nextInt();
-            int end = sc.nextInt();
+            StringTokenizer st = new StringTokenizer(br.readLine());
+            int start = Integer.parseInt(st.nextToken());
+            int end = Integer.parseInt(st.nextToken());
 
-            classes.add(new Class(start, end));
+            lectures.add(new Lecture(start, end));
         }
 
-        Collections.sort(classes);
+        // 시작시간 빠른 순서대로 정렬
+        Collections.sort(lectures);
 
-        PriorityQueue<Integer> pq = new PriorityQueue<>();
-
-        pq.add(classes.get(0).end);
-
-        for (int i = 1; i < n; i++) {
-            if (pq.peek() <= classes.get(i).start) {
-                pq.poll();
-            }
-            pq.add(classes.get(i).end);
-        }
-
-        System.out.println(pq.size());
+        System.out.print(getAnswer());
     }
 
-    static class Class implements Comparable<Class> {
+    private static int getAnswer() {
+        // 빨리 끝나는 순서대로 뽑기
+        PriorityQueue<Lecture> pq = new PriorityQueue<>(
+            (a, b) -> (a.end - b.end)
+        );
+
+        pq.add(lectures.get(0));
+
+        // 시작시간 빠른순서대로 iter
+        for (int i = 1; i < n; i++) {
+            Lecture lecture = lectures.get(i);
+
+            if (pq.peek().end <= lecture.start) {
+                pq.poll();
+            }
+
+            pq.add(lecture);
+        }
+
+        return pq.size();
+    }
+
+    static class Lecture implements Comparable<Lecture> {
+
         int start;
         int end;
 
-        public Class(int start, int end) {
+        public Lecture(int start, int end) {
             this.start = start;
             this.end = end;
         }
 
         @Override
-        public int compareTo(Class other) {
-            return Integer.compare(this.start, other.start);
+        public int compareTo(Lecture o) {
+            if (this.start == o.start) {
+                return this.end - o.end;
+            }
+
+            return this.start - o.start;
         }
     }
 }
