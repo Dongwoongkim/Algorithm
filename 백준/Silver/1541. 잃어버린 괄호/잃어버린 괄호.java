@@ -8,22 +8,40 @@ import java.util.stream.Collectors;
 
 public class Main {
 
+    static String eq;
+    static List<String> splitMinus = new ArrayList<>();
+    static List<Integer> numbers = new ArrayList<>();
+    static int ans = 0;
+
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        String line = br.readLine();
+        eq = br.readLine();
 
-        List<String> subEq = Arrays.stream(line.split("-")).collect(Collectors.toList());
+        System.out.println(getAnswer());
+    }
 
-        List<Integer> numbers = new ArrayList<>();
-        for (String s : subEq) {
-            int sum = Arrays.stream(s.split("\\+")).mapToInt(Integer::parseInt).sum();
-            numbers.add(sum);
+    private static int getAnswer() {
+        splitMinus = Arrays.stream(eq.split("-"))
+            .collect(Collectors.toList());
+
+        for (String minus : splitMinus) {
+            if (minus.contains("+")) {
+                int sum = Arrays.stream(minus.split("\\+"))
+                    .mapToInt(Integer::parseInt).sum();
+                numbers.add(sum);
+            } else {
+                numbers.add(Integer.parseInt(minus));
+            }
         }
 
-        int ans = numbers.get(0);
-        for (int i = 1; i < numbers.size(); i++) {
+        for (int i = 0; i < numbers.size(); i++) {
+            if (i == 0) {
+                ans += numbers.get(i);
+                continue;
+            }
             ans -= numbers.get(i);
         }
-        System.out.println(ans);
+
+        return ans;
     }
 }
