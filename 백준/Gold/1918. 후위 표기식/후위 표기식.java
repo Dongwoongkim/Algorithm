@@ -16,15 +16,21 @@ public class Main {
         System.out.print(getAnswer());
     }
 
+    // 연산자 우선순위
+    // * / -> 1
+    // + - -> 2
+    // ( ) -> 3
     private static String getAnswer() {
         for (int i = 0; i < eq.length(); i++) {
             char ch = eq.charAt(i);
 
+            // dq에 바로 추가
             if (ch == '(') {
                 dq.addLast(ch);
                 continue;
             }
 
+            // dq에서 ( 나올떄까지 pop하고 출력
             if (ch == ')') {
                 while (!dq.isEmpty()) {
                     char opr = dq.removeLast();
@@ -37,11 +43,13 @@ public class Main {
             }
 
             if (ch == '*' || ch == '/') {
+                // 비어있으면 dq add
                 if (dq.isEmpty()) {
                     dq.addLast(ch);
                     continue;
                 }
 
+                // dq의 peek이 +나 - 만날떄까지 pop & 출력
                 while (!dq.isEmpty()) {
                     char opr = dq.peekLast();
                     if (opr == '*' || opr == '/') {
@@ -55,11 +63,13 @@ public class Main {
             }
 
             if (ch == '+' || ch == '-') {
+                // 비어있으면 dq add
                 if (dq.isEmpty()) {
                     dq.addLast(ch);
                     continue;
                 }
 
+                // dq의 peek이 ( 만날때까지 pop & 출력
                 while (!dq.isEmpty()) {
                     char opr = dq.removeLast();
                     if (opr == '(') {
@@ -72,6 +82,7 @@ public class Main {
                 continue;
             }
 
+            // 알파벳은 그냥 추가
             sb.append(ch);
         }
 
