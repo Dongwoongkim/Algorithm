@@ -1,32 +1,39 @@
-import java.util.Arrays;
-import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.StringTokenizer;
 
 public class Main {
 
-    static int n;
-    static int[] arr;
-    static int[] ans;
+    static List<Integer> arr = new ArrayList<>();
+    static List<Integer> arr2 = new ArrayList<>();
 
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        int n = sc.nextInt();
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int n = Integer.parseInt(br.readLine());
 
-        arr = new int[n + 1];
-        ans = new int[n + 1];
-
+        StringTokenizer st = new StringTokenizer(br.readLine());
         for (int i = 0; i < n; i++) {
-            arr[i] = sc.nextInt();
+            arr.add(Integer.parseInt(st.nextToken()));
         }
-        for (int i = 0; i < n; i++) {
-            ans[i] = sc.nextInt();
-        }
-        Arrays.sort(arr, 0, n);
-        Arrays.sort(ans, 0, n);
 
-        int sum = 0;
+        st = new StringTokenizer(br.readLine());
         for (int i = 0; i < n; i++) {
-            sum += arr[i] * ans[n - 1 - i];
+            arr2.add(Integer.parseInt(st.nextToken()));
         }
-        System.out.println(sum);
+
+        Collections.sort(arr);
+        Collections.sort(arr2);
+        Collections.reverse(arr);
+
+        int ans = 0;
+        for (int i = 0; i < n; i++) {
+            ans += arr.get(i) * arr2.get(i);
+        }
+
+        System.out.println(ans);
     }
 }
