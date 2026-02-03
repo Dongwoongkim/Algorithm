@@ -1,97 +1,60 @@
-import static java.util.Collections.sort;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.Collections;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
 
 public class Main {
+
+    static List<Integer> arr = new ArrayList<>();
+    static int[] frequency = new int[4001];
+    static int[] mfrequency = new int[4001];
+
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-
-        List<Integer> arr = new ArrayList<>();
-
-        Map<Integer, List<Integer>> frequency = new TreeMap<>();
-        Map<Integer, Integer> fqMap = new HashMap<>();
-
         int n = Integer.parseInt(br.readLine());
-
+        int sum = 0;
         for (int i = 0; i < n; i++) {
-            int num = Integer.parseInt(br.readLine());
-            arr.add(num);
-
-            if (!fqMap.containsKey(num)) {
-                fqMap.put(num, 1);
-                continue;
+            arr.add(Integer.parseInt(br.readLine()));
+            sum += arr.get(i);
+            if (arr.get(i) > 0) {
+                frequency[arr.get(i)]++;
+            } else {
+                mfrequency[-arr.get(i)]++;
             }
-
-            fqMap.put(num, fqMap.get(num) + 1);
         }
 
-        int maxCount = -1;
-
-        maxCount = getMaxCount(arr, maxCount, frequency, fqMap);
-        List<Integer> maxFrequencyNumbers = frequency.get(maxCount);
-
-        sort(arr);
-        sort(maxFrequencyNumbers);
-
-        printAverage(arr);
-        printMid(arr);
-        printMode(maxFrequencyNumbers);
-        printRange(arr);
-    }
-
-    private static int getMaxCount(List<Integer> arr, int maxCount,
-                                   Map<Integer, List<Integer>> frequency,
-                                   Map<Integer, Integer> fqMap) {
-        Set<Integer> set = new HashSet<>(arr);
-        for (Integer number : set) {
-
-            int count = fqMap.get(number);
-
-            if (maxCount <= count) {
-                maxCount = count;
+        int maxFrequency = 0;
+        int frqN = 312312123;
+        for (int i = 0; i < 4001; i++) {
+            if (frequency[i] > maxFrequency) {
+                maxFrequency = frequency[i];
+                frqN = i;
             }
 
-            if (!frequency.containsKey(count)) {
-                List<Integer> tmp = new ArrayList<>();
-                tmp.add(number);
-                frequency.put(count, tmp);
-                continue;
+            if (mfrequency[i] > maxFrequency) {
+                maxFrequency = mfrequency[i];
+                frqN = -i;
             }
-
-            List<Integer> numbers = frequency.get(count);
-            numbers.add(number);
-            frequency.put(count, numbers);
         }
 
-        return maxCount;
-    }
+        List<Integer> fqes = new ArrayList<>();
+        for (int i = 0; i < 4001; i++) {
+            if (frequency[i] == maxFrequency) {
+                fqes.add(i);
+            }
 
-    private static void printMid(List<Integer> arr) {
+            if (mfrequency[i] == maxFrequency) {
+                fqes.add(-i);
+            }
+        }
+
+        Collections.sort(fqes);
+        Collections.sort(arr);
+        System.out.println(Math.round((double) sum / n));
         System.out.println(arr.get(arr.size() / 2));
-    }
-
-    private static void printAverage(List<Integer> arr) {
-        System.out.println(Math.round(arr.stream().mapToInt(Integer::intValue).average().getAsDouble()));
-    }
-
-    private static void printRange(List<Integer> arr) {
+        System.out.println(fqes.size() == 1 ? fqes.get(0) : fqes.get(1));
         System.out.println(arr.get(arr.size() - 1) - arr.get(0));
-    }
-
-    private static void printMode(List<Integer> maxFrequencyNumbers) {
-        if (maxFrequencyNumbers.size() == 1) {
-            System.out.println(maxFrequencyNumbers.get(0));
-            return;
-        }
-        System.out.println(maxFrequencyNumbers.get(1));
     }
 }
