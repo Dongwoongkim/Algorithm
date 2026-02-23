@@ -1,23 +1,24 @@
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.Scanner;
+import java.io.InputStreamReader;
 
 public class Main {
+
+    static int num = 0;
+    static int cnt = 0;
+
     public static void main(String[] args) throws IOException {
-        Scanner sc = new Scanner(System.in);
-        int n = sc.nextInt();
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int n = Integer.parseInt(br.readLine());
 
-        long number = 1;
-        int idx = 0;
         while (true) {
-            number++;
-
-            if (String.valueOf(number).contains("666")) {
-                idx++;
-            }
-
-            if (idx == n) {
-                System.out.print(number);
+            if (cnt == n) {
+                System.out.print(num);
                 break;
+            }
+            num++;
+            if (String.valueOf(num).contains("666")) {
+                cnt++;
             }
         }
     }
